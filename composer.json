@@ -1,0 +1,54 @@
+{
+    "name": "smartassert/symfony-test-client",
+    "description": "",
+    "keywords": [],
+    "homepage": "https://github.com/smartassert/symfony-test-client",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Jon Cram",
+            "email": "webignition@gmail.com"
+        }
+    ],
+    "scripts": {
+        "cs-fixer-dry-run": "docker run --rm $(if [ ! -z \"${NO_TTY}\" ]; then echo \"\"; else echo \"-t\"; fi) -w=/app -v ${PWD}:/app oskarstark/php-cs-fixer-ga:latest --allow-risky=yes --dry-run --verbose --show-progress none",
+        "cs-fixer-fix": "docker run --rm $(if [ ! -z \"${NO_TTY}\" ]; then echo \"\"; else echo \"-t\"; fi) -w=/app -v ${PWD}:/app oskarstark/php-cs-fixer-ga:latest --allow-risky=yes --diff",
+        "cs-phpcs": "./vendor/bin/phpcs",
+        "cs": [
+            "@cs-fixer-dry-run",
+            "@cs-phpcs"
+        ],
+        "static-analysis": "./vendor/bin/phpstan",
+        "test": "./vendor/bin/phpunit --colors=always",
+        "ci": [
+            "@composer cs",
+            "@composer static-analysis",
+            "@composer test"
+        ]
+    },
+    "autoload": {
+        "psr-4": {
+            "SmartAssert\\SymfonyTestClient\\": "src/",
+            "SmartAssert\\Tests\\SymfonyTestClient\\": "tests/"
+        }
+    },
+    "require": {
+        "php": "^8.1"
+    },
+    "require-dev": {
+        "phpstan/extension-installer": "^1.1",
+        "phpstan/phpstan": "^1.5",
+        "phpstan/phpstan-phpunit": "^1.1",
+        "phpunit/phpunit": "^9.5",
+        "squizlabs/php_codesniffer": "^3.6"
+    },
+    "minimum-stability":"stable",
+    "prefer-stable":true,
+    "config": {
+        "allow-plugins": {
+            "phpstan/extension-installer": true
+        },
+        "sort-packages": true
+    }
+}
