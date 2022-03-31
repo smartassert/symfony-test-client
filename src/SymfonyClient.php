@@ -70,21 +70,13 @@ class SymfonyClient implements ClientInterface
      */
     private function prepareParameters(string $method, array $headers, ?string $body): array
     {
-        if (null === $body) {
-            return [];
-        }
-
-        if ('POST' === $method || 'PUT' === $method) {
-            $contentType = $headers['content-type'] ?? null;
-
-            if ('application/x-www-form-urlencoded' === $contentType) {
-                parse_str($body, $parameters);
+        return $this->isMutationRequestWithFormPayload($method, $headers)
+            ? (function () use ($body) {
+                parse_str((string) $body, $parameters);
 
                 return $parameters;
-            }
-        }
-
-        return [];
+            })()
+            : [];
     }
 
     /**
@@ -92,18 +84,15 @@ class SymfonyClient implements ClientInterface
      */
     private function prepareBody(string $method, array $headers, ?string $body): ?string
     {
-        if (null === $body) {
-            return null;
-        }
+        return $this->isMutationRequestWithFormPayload($method, $headers) ? null : $body;
+    }
 
-        if ('POST' === $method || 'PUT' === $method) {
-            $contentType = $headers['content-type'] ?? null;
-
-            if ('application/x-www-form-urlencoded' === $contentType) {
-                return null;
-            }
-        }
-
-        return $body;
+    /**
+     * @param array<mixed> $headers
+     */
+    private function isMutationRequestWithFormPayload(string $method, array $headers): bool
+    {
+        return ('POST' === $method || 'PUT' === $method)
+            && 'application/x-www-form-urlencoded' === ($headers['content-type'] ?? null);
     }
 }
