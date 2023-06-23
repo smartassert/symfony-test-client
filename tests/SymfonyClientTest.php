@@ -86,7 +86,7 @@ class SymfonyClientTest extends TestCase
     /**
      * @return array<mixed>
      */
-    public function makeRequestDataProvider(): array
+    public static function makeRequestDataProvider(): array
     {
         $arbitraryBody = md5((string) rand());
         $formPayload = ['key1' => 'value1', 'key2' => 'value2', 'key3' => 'value3'];
