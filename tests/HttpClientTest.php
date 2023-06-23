@@ -56,7 +56,7 @@ class HttpClientTest extends TestCase
     /**
      * @return array<mixed>
      */
-    public function makeRequestDataProvider(): array
+    public static function makeRequestDataProvider(): array
     {
         return [
             'GET request without headers, without body' => [
