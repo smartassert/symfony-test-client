@@ -12,10 +12,6 @@ use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use SmartAssert\SymfonyTestClient\HttpClient;
 
-/**
- * @internal
- * @coversNothing
- */
 class HttpClientTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
