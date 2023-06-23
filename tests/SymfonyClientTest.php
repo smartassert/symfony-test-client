@@ -12,10 +12,6 @@ use Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\HttpFoundation\Response;
 
-/**
- * @internal
- * @coversNothing
- */
 class SymfonyClientTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
