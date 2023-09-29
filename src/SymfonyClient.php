@@ -7,6 +7,7 @@ namespace SmartAssert\SymfonyTestClient;
 use Psr\Http\Message\ResponseInterface as Response;
 use Symfony\Bridge\PsrHttpMessage\HttpMessageFactoryInterface;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
+use Symfony\Component\BrowserKit\Cookie;
 
 class SymfonyClient implements ClientInterface
 {
@@ -28,6 +29,11 @@ class SymfonyClient implements ClientInterface
         $parameters = $this->prepareParameters($method, $headers, $body);
         $body = $this->prepareBody($method, $headers, $body);
 
+        $rawCookies = $headers['cookie'] ?? '';
+        $rawCookies = is_string($rawCookies) ? $rawCookies : '';
+
+        $this->setCookies($rawCookies);
+
         $this->kernelBrowser->request($method, $uri, $parameters, [], $headers, $body);
 
         $symfonyResponse = $this->kernelBrowser->getResponse();
@@ -36,6 +42,20 @@ class SymfonyClient implements ClientInterface
         $response->getBody()->rewind();
 
         return $response;
+    }
+
+    private function setCookies(string $rawCookies): void
+    {
+        $rawCookies = trim($rawCookies);
+        if ('' === $rawCookies) {
+            return;
+        }
+
+        $cookieKeyValuePairs = explode('; ', $rawCookies);
+
+        foreach ($cookieKeyValuePairs as $cookieKeyValuePair) {
+            $this->kernelBrowser->getCookieJar()->set(Cookie::fromString($cookieKeyValuePair));
+        }
     }
 
     /**

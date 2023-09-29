@@ -6,10 +6,13 @@ namespace SmartAssert\Tests\SymfonyTestClient;
 
 use GuzzleHttp\Psr7\HttpFactory;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+use Mockery\MockInterface;
 use PHPUnit\Framework\TestCase;
 use SmartAssert\SymfonyTestClient\SymfonyClient;
 use Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
+use Symfony\Component\BrowserKit\Cookie;
+use Symfony\Component\BrowserKit\CookieJar;
 use Symfony\Component\HttpFoundation\Response;
 
 class SymfonyClientTest extends TestCase
@@ -19,15 +22,17 @@ class SymfonyClientTest extends TestCase
     /**
      * @dataProvider makeRequestDataProvider
      *
-     * @param array<string, string> $headers
-     * @param array<string, string> $expectedRequestParameters
-     * @param string[][]            $expectedRequestHeaders
+     * @param array<string, string>                   $headers
+     * @param ?callable(MockInterface): KernelBrowser $mockKernelBrowserMutator
+     * @param array<string, string>                   $expectedRequestParameters
+     * @param string[][]                              $expectedRequestHeaders
      */
     public function testMakeRequest(
         string $method,
         string $uri,
         array $headers,
         ?string $body,
+        ?callable $mockKernelBrowserMutator,
         array $expectedRequestParameters,
         array $expectedRequestHeaders,
         ?string $expectedBody,
@@ -74,6 +79,10 @@ class SymfonyClientTest extends TestCase
             ->andReturn($symfonyResponse)
         ;
 
+        if (is_callable($mockKernelBrowserMutator)) {
+            $kernelBrowser = $mockKernelBrowserMutator($kernelBrowser);
+        }
+
         $client->setKernelBrowser($kernelBrowser);
 
         $receivedResponse = $client->makeRequest($method, $uri, $headers, $body);
@@ -98,6 +107,7 @@ class SymfonyClientTest extends TestCase
                 'uri' => 'https://example.com/get-without-headers-without-body',
                 'headers' => [],
                 'body' => null,
+                'mockKernelBrowserMutator' => null,
                 'expectedRequestParameters' => [],
                 'expectedRequestHeaders' => [],
                 'expectedBody' => null,
@@ -112,6 +122,7 @@ class SymfonyClientTest extends TestCase
                     'HEADER2' => 'VALUE2',
                 ],
                 'body' => null,
+                'mockKernelBrowserMutator' => null,
                 'expectedRequestParameters' => [],
                 'expectedRequestHeaders' => [
                     'header1' => 'value1',
@@ -128,6 +139,7 @@ class SymfonyClientTest extends TestCase
                 'uri' => 'https://example.com/post-without-headers-with-arbitrary-body',
                 'headers' => [],
                 'body' => $arbitraryBody,
+                'mockKernelBrowserMutator' => null,
                 'expectedRequestParameters' => [],
                 'expectedRequestHeaders' => [],
                 'expectedBody' => $arbitraryBody,
@@ -139,6 +151,7 @@ class SymfonyClientTest extends TestCase
                     'content-type' => 'application/x-www-form-urlencoded',
                 ],
                 'body' => $formContentBody,
+                'mockKernelBrowserMutator' => null,
                 'expectedRequestParameters' => $formPayload,
                 'expectedRequestHeaders' => [
                     'content-type' => 'application/x-www-form-urlencoded',
@@ -153,10 +166,43 @@ class SymfonyClientTest extends TestCase
                     'content-type' => 'application/x-www-form-urlencoded',
                 ],
                 'body' => $formContentBody,
+                'mockKernelBrowserMutator' => null,
                 'expectedRequestParameters' => $formPayload,
                 'expectedRequestHeaders' => [
                     'content-type' => 'application/x-www-form-urlencoded',
                     'CONTENT_TYPE' => 'application/x-www-form-urlencoded',
+                ],
+                'expectedBody' => null,
+            ],
+            'GET request with cookie header, without body' => [
+                'method' => 'GET',
+                'uri' => 'https://example.com/get-without-headers-without-body',
+                'headers' => [
+                    'cookie' => 'key1=value1',
+                ],
+                'body' => null,
+                'mockKernelBrowserMutator' => function (MockInterface&KernelBrowser $kernelBrowser) {
+                    $cookieJar = \Mockery::mock(CookieJar::class);
+                    $cookieJar
+                        ->shouldReceive('set')
+                        ->withArgs(function (Cookie $cookie) {
+                            self::assertSame('key1', $cookie->getName());
+                            self::assertSame('value1', $cookie->getValue());
+
+                            return true;
+                        })
+                    ;
+
+                    $kernelBrowser
+                        ->shouldReceive('getCookieJar')
+                        ->andReturn($cookieJar)
+                    ;
+
+                    return $kernelBrowser;
+                },
+                'expectedRequestParameters' => [],
+                'expectedRequestHeaders' => [
+                    'cookie' => 'key1=value1',
                 ],
                 'expectedBody' => null,
             ],
