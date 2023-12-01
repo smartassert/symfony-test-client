@@ -14,7 +14,7 @@ class SymfonyClient implements ClientInterface
     private KernelBrowser $kernelBrowser;
 
     public function __construct(
-        private HttpMessageFactoryInterface $httpMessageFactory,
+        private readonly HttpMessageFactoryInterface $httpMessageFactory,
     ) {
     }
 
