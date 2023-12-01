@@ -181,7 +181,7 @@ class SymfonyClientTest extends TestCase
                     'cookie' => 'key1=value1',
                 ],
                 'body' => null,
-                'mockKernelBrowserMutator' => function (MockInterface&KernelBrowser $kernelBrowser) {
+                'mockKernelBrowserMutator' => function (KernelBrowser&MockInterface $kernelBrowser) {
                     $cookieJar = \Mockery::mock(CookieJar::class);
                     $cookieJar
                         ->shouldReceive('set')
