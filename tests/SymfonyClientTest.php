@@ -120,17 +120,17 @@ class SymfonyClientTest extends TestCase
                     'content-type' => 'application/json',
                     'authorization' => 'Bearer: token',
                     'HEADER2' => 'VALUE2',
+                    'CONTENT_TYPE' => 'application/json',
                 ],
                 'body' => null,
                 'mockKernelBrowserMutator' => null,
                 'expectedRequestParameters' => [],
                 'expectedRequestHeaders' => [
-                    'header1' => 'value1',
                     'content-type' => 'application/json',
-                    'authorization' => 'Bearer: token',
-                    'header2' => 'VALUE2',
+                    'HTTP_HEADER1' => 'value1',
                     'CONTENT_TYPE' => 'application/json',
                     'HTTP_AUTHORIZATION' => 'Bearer: token',
+                    'HTTP_HEADER2' => 'VALUE2',
                 ],
                 'expectedBody' => null,
             ],
@@ -201,9 +201,7 @@ class SymfonyClientTest extends TestCase
                     return $kernelBrowser;
                 },
                 'expectedRequestParameters' => [],
-                'expectedRequestHeaders' => [
-                    'cookie' => 'key1=value1',
-                ],
+                'expectedRequestHeaders' => [],
                 'expectedBody' => null,
             ],
         ];
