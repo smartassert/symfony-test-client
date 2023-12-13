@@ -70,15 +70,16 @@ class SymfonyClient implements ClientInterface
             $mutatedHeaders[strtolower($key)] = $value;
         }
 
-        $contentType = $mutatedHeaders['content-type'] ?? null;
-        if (is_string($contentType)) {
-            $mutatedHeaders['CONTENT_TYPE'] = $contentType;
+        foreach ($mutatedHeaders as $key => $value) {
+            if ('content-type' === $key || 'content_type' === $key) {
+                $mutatedHeaders['CONTENT_TYPE'] = $value;
+            } else {
+                $mutatedHeaders['HTTP_' . strtoupper($key)] = $value;
+                unset($mutatedHeaders[$key]);
+            }
         }
 
-        $authorization = $mutatedHeaders['authorization'] ?? null;
-        if (is_string($authorization)) {
-            $mutatedHeaders['HTTP_AUTHORIZATION'] = $authorization;
-        }
+        unset($mutatedHeaders['content_type'], $mutatedHeaders['HTTP_COOKIE']);
 
         return $mutatedHeaders;
     }
