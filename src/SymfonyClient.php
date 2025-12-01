@@ -37,7 +37,6 @@ class SymfonyClient implements ClientInterface
         $this->kernelBrowser->request($method, $uri, $parameters, [], $headers, $body);
 
         $symfonyResponse = $this->kernelBrowser->getResponse();
-        \assert($symfonyResponse instanceof SymfonyResponse);
 
         $response = $this->httpMessageFactory->createResponse($symfonyResponse);
         $response->getBody()->rewind();
