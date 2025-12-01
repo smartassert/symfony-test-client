@@ -25,7 +25,7 @@ jobs:
     strategy:
       matrix:
         operating-system: [ubuntu-latest]
-        php: ['8.2', '8.3']
+        php: ['8.4']
         symfony: ['6.4.*', '7.0.*']
 
     runs-on: ${{ matrix.operating-system }}
