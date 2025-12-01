@@ -8,6 +8,7 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Symfony\Bridge\PsrHttpMessage\HttpMessageFactoryInterface;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\BrowserKit\Cookie;
+use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 
 class SymfonyClient implements ClientInterface
 {
@@ -37,6 +38,7 @@ class SymfonyClient implements ClientInterface
         $this->kernelBrowser->request($method, $uri, $parameters, [], $headers, $body);
 
         $symfonyResponse = $this->kernelBrowser->getResponse();
+        \assert($symfonyResponse instanceof SymfonyResponse);
 
         $response = $this->httpMessageFactory->createResponse($symfonyResponse);
         $response->getBody()->rewind();
