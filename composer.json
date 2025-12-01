@@ -54,7 +54,7 @@
         "phpstan/phpstan": "^1.5",
         "phpstan/phpstan-mockery": "^1.0",
         "phpstan/phpstan-phpunit": "^1.1",
-        "phpunit/phpunit": "^10.2",
+        "phpunit/phpunit": "^12",
         "squizlabs/php_codesniffer": "^4"
     },
     "minimum-stability":"stable",

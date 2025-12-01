@@ -7,6 +7,7 @@ namespace SmartAssert\Tests\SymfonyTestClient;
 use GuzzleHttp\Psr7\HttpFactory;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use Mockery\MockInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use SmartAssert\SymfonyTestClient\SymfonyClient;
 use Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory;
@@ -20,13 +21,12 @@ class SymfonyClientTest extends TestCase
     use MockeryPHPUnitIntegration;
 
     /**
-     * @dataProvider makeRequestDataProvider
-     *
      * @param array<string, string>                   $headers
      * @param ?callable(MockInterface): KernelBrowser $mockKernelBrowserMutator
      * @param array<string, string>                   $expectedRequestParameters
      * @param string[][]                              $expectedRequestHeaders
      */
+    #[DataProvider('makeRequestDataProvider')]
     public function testMakeRequest(
         string $method,
         string $uri,
