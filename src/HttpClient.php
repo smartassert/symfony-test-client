@@ -17,8 +17,7 @@ readonly class HttpClient implements ClientInterface
         private RequestFactory $requestFactory,
         private StreamFactory $streamFactory,
         private Psr7HttpClient $httpClient,
-    ) {
-    }
+    ) {}
 
     /**
      * @param array<string, string> $headers
