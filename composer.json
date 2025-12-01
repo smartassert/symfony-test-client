@@ -60,9 +60,6 @@
     "minimum-stability":"stable",
     "prefer-stable":true,
     "config": {
-        "audit": {
-            "block-insecure": false
-        },
         "allow-plugins": {
             "phpstan/extension-installer": true
         },
