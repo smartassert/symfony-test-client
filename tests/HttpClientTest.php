@@ -6,6 +6,7 @@ namespace SmartAssert\Tests\SymfonyTestClient;
 
 use GuzzleHttp\Psr7\HttpFactory;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Client\ClientInterface as HttpClientInterface;
 use Psr\Http\Message\RequestInterface;
@@ -17,11 +18,10 @@ class HttpClientTest extends TestCase
     use MockeryPHPUnitIntegration;
 
     /**
-     * @dataProvider makeRequestDataProvider
-     *
      * @param array<string, string> $headers
      * @param string[][]            $expectedRequestHeaders
      */
+    #[DataProvider('makeRequestDataProvider')]
     public function testMakeRequest(
         string $method,
         string $uri,
