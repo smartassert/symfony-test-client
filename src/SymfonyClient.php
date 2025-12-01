@@ -8,7 +8,6 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Symfony\Bridge\PsrHttpMessage\HttpMessageFactoryInterface;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\BrowserKit\Cookie;
-use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 
 class SymfonyClient implements ClientInterface
 {
