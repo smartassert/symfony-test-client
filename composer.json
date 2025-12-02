@@ -39,7 +39,7 @@
     },
     "require": {
         "php": "^8.4",
-        "psr/http-client": "*",
+        "psr/http-client": "^1",
         "psr/http-factory": "*",
         "psr/http-message": "*",
         "symfony/browser-kit": "^7 || ^8",
