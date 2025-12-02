@@ -40,7 +40,7 @@
     "require": {
         "php": "^8.4",
         "psr/http-client": "^1",
-        "psr/http-factory": "*",
+        "psr/http-factory": "^1",
         "psr/http-message": "*",
         "symfony/browser-kit": "^7 || ^8",
         "symfony/framework-bundle": "^7 || ^8",
