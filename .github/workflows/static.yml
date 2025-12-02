@@ -8,7 +8,7 @@ on:
 
 jobs:
   phpstan:
-    name: PHPStan - PHP ${{ matrix.php }} symfony/${{ matrix.symfony }}
+    name: PHPStan - PHP ${{ matrix.php }} symfony/${{ matrix.symfony }} psr/http-* ${{ matrix.psr-http }}
     strategy:
       matrix:
         operating-system: [ubuntu-latest]
